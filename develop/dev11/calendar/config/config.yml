@@ -1,0 +1,8 @@
+port: "8000"
+
+db:
+  host: "localhost"
+  user: "postgres"
+  password: "postgres"
+  database: "calendar"
+
