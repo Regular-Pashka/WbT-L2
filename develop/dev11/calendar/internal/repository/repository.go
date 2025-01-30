@@ -1,11 +1,11 @@
 package repository
 
 import (
-    
+	"github.com/jmoiron/sqlx"
 )
 
 type Event interface {
-    CreateEvent()
+	CreateEvent()
 	GetByDay()
 	GetByWeek()
 	GetByMonth()
@@ -13,11 +13,11 @@ type Event interface {
 }
 
 type Repository struct {
-    Event
+	Event
 }
 
-func NewRepository() *Repository {
-    return &Repository{
-        Event: NewEventPostgres(),
-    }
+func NewRepository(db *sqlx.DB) *Repository {
+	return &Repository{
+		Event: NewEventPostgres(db),
+	}
 }

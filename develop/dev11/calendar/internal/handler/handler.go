@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"wbtl2/develop/dev11/calendar/internal/service"
+	"WbT-L2/develop/dev11/calendar/internal/service"
 )
 
 type Handler struct {
