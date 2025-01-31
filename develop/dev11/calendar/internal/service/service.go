@@ -1,11 +1,16 @@
 package service
 
+import (
+	"github.com/Regular-Pashka/WbT-L2/develop/dev11/calendar/internal/domain"
+	"github.com/Regular-Pashka/WbT-L2/develop/dev11/calendar/internal/repository"
+)
+
 type Event interface {
-	CreateEvent()
-	GetByDay()
-	GetByWeek()
-	GetByMonth()
-	UpdateEvent()
+	CreateEvent(event domain.Event) (int, error)
+	// GetByDay()
+	// GetByWeek()
+	// GetByMonth()
+	// UpdateEvent()
 }
 
 type Service struct {
@@ -13,8 +18,9 @@ type Service struct {
 	Event
 }
 
-func NewService() *Service {
+func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Event: NewEventService(repos.Event),
 	}
 }
+

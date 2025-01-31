@@ -11,7 +11,8 @@ type EventPostgres struct {
 	db *sqlx.DB
 }
 
-func NewCalendarEventPostgres(db *sqlx.DB) *EventPostgres {
+
+func NewEventPostgres(db *sqlx.DB) *EventPostgres {
 	return &EventPostgres{
 		db: db,
 	}
@@ -24,7 +25,7 @@ func (r *EventPostgres) CreateEvent(event domain.Event) (int, error) {
 	}
 
 	var id int
-	createEventQuery := fmt.Sprint("INSERT INTO %s (title, description, date, start_time, end_time) VALUES ($1, $2, $3, $4, $5) RETURNING id", event)
+	createEventQuery := fmt.Sprintf("INSERT INTO %s (title, description, date, start_time, end_time) VALUES ($1, $2, $3, $4, $5) RETURNING id", eventsTable)
 	row := tx.QueryRow(createEventQuery, event.Title, event.Description, event.Date, event.StartTime, event.EndTime)
 	if err := row.Scan(&id); err != nil {
 		tx.Rollback()
