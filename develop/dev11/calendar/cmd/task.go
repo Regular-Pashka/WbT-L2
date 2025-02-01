@@ -19,34 +19,37 @@ import (
 */
 
 func main() {
-	/* viper.SetConfigName("config")
+	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("../config")
+	viper.AddConfigPath("./config")
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatalf("Error reading config file, %s", err)
-	} */
+		logrus.Fatalf("Error reading config file, %s", err)
+	}
+
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.username"),
+		Username: viper.GetString("db.user"),
 		Password: os.Getenv("DB_PASSWORD"),
 		DBName:   viper.GetString("db.database"),
-		SSLMode:  viper.GetString("db.sslmode"),
 	})
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/hello")
+	// mux := http.NewServeMux()
+	// mux.HandleFunc("/hello")
 
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
+	http.HandleFunc("/hello", handlers.CreateEvent)
+
 	port := "8000"
 
-	http.ListenAndServe(":"+port, mux)
 
+	logrus.Println("Server started on port " + port)
+	logrus.Fatal(http.ListenAndServe(":" + port, nil))
 }
