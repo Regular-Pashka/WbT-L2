@@ -34,3 +34,25 @@ func (h *Handler) CreateEvent(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]int{"id": id})
 }
+
+func (h *Handler) GetByDay(w http.ResponseWriter, r *http.Request) {
+	dateStr := r.URL.Query().Get("date")
+
+	if dateStr == "" {
+		http.Error(w, "Date parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	date, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		http.Error(w, "Invalid date format, expected YYYY-MM-DD", http.StatusBadRequest)
+		return
+	}
+
+	events, err := h.services.GetByDay(date)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+}

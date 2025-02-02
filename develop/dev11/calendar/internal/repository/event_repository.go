@@ -34,3 +34,4 @@ func (r *EventPostgres) CreateEvent(event domain.Event) (int, error) {
 
 	return id, tx.Commit()
 }
+
